@@ -12,7 +12,7 @@
 - prop-types
 - Eslint
 
-## Tecnologias
+## Tecnologias Backend
 
 - Node js
 - Express js
