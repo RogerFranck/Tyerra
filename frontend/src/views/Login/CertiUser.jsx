@@ -15,7 +15,7 @@ import {
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import logo from '../../Assets/Tyerra.png';
-import { UpdateCertiUser } from '../../Redux/Actions';
+import { UpdateCertificado } from '../../Redux/Actions';
 
 const useStyles = makeStyles((theme) => ({
   main: {
@@ -51,14 +51,17 @@ function subir() {
   );
 }
 
-function Regresar(updateservicio) {
+function Regresar(updateservicio, userdata) {
+  const {
+    _id, usuario, numero, correo,
+  } = userdata;
   return (
     <div>
       <Typography variant="subtitle1">
         Ya eres un usuario Certificado!!
       </Typography>
       <br />
-      <Button variant="outlined" component={Link} to="/" onClick={() => updateservicio()}>
+      <Button variant="outlined" onClick={() => updateservicio(_id, usuario, numero, correo)}>
         Regresar
       </Button>
     </div>
@@ -69,7 +72,7 @@ function getSteps() {
   return ['Subir INE', 'Subir Acta de Nacimiento', 'Subir Documento 3'];
 }
 
-function getStepContent(step, updateservicio) {
+function getStepContent(step, updateservicio, userdata) {
   switch (step) {
     case 0:
       return subir();
@@ -78,14 +81,15 @@ function getStepContent(step, updateservicio) {
     case 2:
       return subir();
     default:
-      return Regresar(updateservicio);
+      return Regresar(updateservicio, userdata);
   }
 }
 
-function CertiUser({ updateservicio }) {
+function CertiUser({ Usuario, updateservicio }) {
   const classes = useStyles();
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
+  const userdata = Usuario;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -118,7 +122,7 @@ function CertiUser({ updateservicio }) {
                 })}
               </Stepper>
               <div>
-                {getStepContent(activeStep, updateservicio)}
+                {getStepContent(activeStep, updateservicio, userdata)}
               </div>
             </div>
           </CardContent>
@@ -136,10 +140,14 @@ function CertiUser({ updateservicio }) {
   );
 }
 
+const mapStateToProps = (state) => ({
+  Usuario: state.Usuario,
+});
+
 const mapDispatchToProps = (dispatch) => ({
-  updateservicio() {
-    dispatch(UpdateCertiUser());
+  updateservicio(id, usuario, numero, correo) {
+    dispatch(UpdateCertificado(id, usuario, numero, correo));
   },
 });
 
-export default connect(null, mapDispatchToProps)(CertiUser);
+export default connect(mapStateToProps, mapDispatchToProps)(CertiUser);

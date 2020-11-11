@@ -1,7 +1,6 @@
 const usuariosCtrl = {};
 
 const usuarioModel = require('../models/usuario_model')
-// const jwt = require('jsonwebtoken'); // Pendiente para cuando el usuario se registre
 const bcrypt = require('bcryptjs');
 
 usuariosCtrl.getUsers = async (req, res) => {
@@ -24,7 +23,6 @@ usuariosCtrl.createUser = async (req, res) => {
 
 
 usuariosCtrl.getUser = async (req, res) => {
-  //req.params.id //recibir el id 
   const usuario = await usuarioModel.findById(req.params.id)
   res.json(usuario)
 };
@@ -42,6 +40,18 @@ usuariosCtrl.updateUser = async (req, res) => {
   nuevoUsuario.password = await bcrypt.hash(password, salt);
   await usuarioModel.findOneAndUpdate({ _id: req.params.id }, nuevoUsuario)
   res.json({ message: "Usuario Actualizado" })
+};
+
+usuariosCtrl.updateUserUnPassword = async (req, res) => {
+  const { correo, usuario, numero } = req.body
+  const nuevoUsuario = {
+    certificado: true,
+    correo,
+    numero: numero,
+    usuario: usuario,
+  }
+  await usuarioModel.findOneAndUpdate({ _id: req.params.id }, nuevoUsuario)
+  res.json({ message: "Usuario Actualizado Sin Password" })
 };
 
 

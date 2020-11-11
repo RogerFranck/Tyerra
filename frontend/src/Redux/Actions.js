@@ -5,7 +5,6 @@ export const GET_PROPIEDAD = 'GET_PROPIEDAD';
 export const LOAD_USERINFO = 'LOAD_USERINFO';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_UNSUCCESSFULL = 'LOGIN_UNSUCCESSFULL';
-export const UPDATE_CERTI_USER = 'UPDATE_CERTI_USER';
 
 export const GetPropiedad = (payload) => ({
   type: GET_PROPIEDAD,
@@ -25,10 +24,6 @@ export const LoginSuccesS = (payload) => ({
 export const LoginUnsuccessFull = (payload) => ({
   type: LOGIN_UNSUCCESSFULL,
   payload,
-});
-
-export const UpdateCertiUser = () => ({
-  type: UPDATE_CERTI_USER,
 });
 
 export const cargarData = () => async (dispatch) => {
@@ -87,6 +82,20 @@ export const Registro = (usuario, password, numero, correo) => async () => {
       numero,
     });
     window.location.href = '/Login';
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(`error: ${error}`);
+  }
+};
+
+export const UpdateCertificado = (id, usuario, numero, correo) => async () => {
+  try {
+    await axios.put(`${api}/usuarios/Certificado/${id}`, {
+      usuario,
+      correo,
+      numero,
+    });
+    window.location.href = '/';
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(`error: ${error}`);
