@@ -5,6 +5,7 @@ export const GET_PROPIEDAD = 'GET_PROPIEDAD';
 export const LOAD_USERINFO = 'LOAD_USERINFO';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_UNSUCCESSFULL = 'LOGIN_UNSUCCESSFULL';
+export const UPDATE_CERTI_USER = 'UPDATE_CERTI_USER';
 
 export const GetPropiedad = (payload) => ({
   type: GET_PROPIEDAD,
@@ -24,6 +25,10 @@ export const LoginSuccesS = (payload) => ({
 export const LoginUnsuccessFull = (payload) => ({
   type: LOGIN_UNSUCCESSFULL,
   payload,
+});
+
+export const UpdateCertiUser = () => ({
+  type: UPDATE_CERTI_USER,
 });
 
 export const cargarData = () => async (dispatch) => {
@@ -62,8 +67,21 @@ export const login = (email, password) => async (dispatch) => {
     });
     if (data.auth) {
       localStorage.setItem('JWT', data.token);
-      window.location.href = '/';
-      loaduser();
+      const jwt = data.token;
+      if (jwt) {
+        try {
+          const res = await axios.get(`${api}/login/validar`, {
+            headers: {
+              'x-jwt': jwt,
+            },
+          });
+          dispatch(LoadUserInfo(res.data));
+        } catch (error) {
+          localStorage.removeItem('JWT');
+          // eslint-disable-next-line no-console
+          console.log(`Roger: ${error}`);
+        }
+      }
     } else {
       dispatch(LoginUnsuccessFull(data.status));
     }
@@ -88,14 +106,14 @@ export const Registro = (usuario, password, numero, correo) => async () => {
   }
 };
 
-export const UpdateCertificado = (id, usuario, numero, correo) => async () => {
+export const UpdateCertificado = (id, usuario, numero, correo) => async (dispatch) => {
   try {
     await axios.put(`${api}/usuarios/Certificado/${id}`, {
       usuario,
       correo,
       numero,
     });
-    window.location.href = '/';
+    dispatch(UpdateCertiUser());
   } catch (error) {
     // eslint-disable-next-line no-console
     console.log(`error: ${error}`);

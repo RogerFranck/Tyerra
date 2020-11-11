@@ -4,6 +4,7 @@ import {
   GET_PROPIEDAD,
   LOAD_USERINFO,
   LOGIN_UNSUCCESSFULL,
+  UPDATE_CERTI_USER,
 } from './Actions';
 
 const initialState = {
@@ -32,6 +33,11 @@ const ReducerPrincipal = (state = initialState, action) => {
       return {
         ...state,
         statusLogin: action.payload,
+      };
+    case UPDATE_CERTI_USER:
+      return {
+        ...state,
+        Userfull: true,
       };
     default:
       return state;

@@ -125,6 +125,8 @@ function Login({
               <br />
               <br />
               <Button
+                component={Link}
+                to="/"
                 onClick={() => enviarLogin(User, Password)}
                 fullWidth
                 variant="contained"

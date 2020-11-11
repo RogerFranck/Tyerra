@@ -61,7 +61,7 @@ function Regresar(updateservicio, userdata) {
         Ya eres un usuario Certificado!!
       </Typography>
       <br />
-      <Button variant="outlined" onClick={() => updateservicio(_id, usuario, numero, correo)}>
+      <Button variant="outlined" component={Link} to="/" onClick={() => updateservicio(_id, usuario, numero, correo)}>
         Regresar
       </Button>
     </div>
